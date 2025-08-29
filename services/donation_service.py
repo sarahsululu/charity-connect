@@ -1,19 +1,17 @@
 import uuid
 from decimal import Decimal
-from datetime import datetime
-from sqlalchemy.exc import IntegrityError
-from models.database import get_session, close_session
+from models.database import get_session
 from models.donation import Donation
 from models.campaign import Campaign
-from models.user import User
 from services.campaign_service import CampaignService
+
 class DonationService:
     def __init__(self):
         self.session = get_session()
         self.campaign_service = CampaignService()
     
     def create_donation(self, donor_id, campaign_id, amount, message=None, 
-                       is_anonymous=False, payment_method='card'):
+                        is_anonymous=False, payment_method='card'):
         """Create a new donation"""
         try:
             if amount <= 0:
@@ -48,6 +46,20 @@ class DonationService:
             
             return donation
             
+        except Exception as e:
+            self.session.rollback()
+            raise e
+
+    def get_donation_history(self, donor_id):
+        """Retrieve all donations made by a specific donor"""
+        try:
+            donations = (
+                self.session.query(Donation)
+                .filter(Donation.donor_id == donor_id)
+                .order_by(Donation.created_at.desc())  
+                .all()
+            )
+            return donations
         except Exception as e:
             self.session.rollback()
             raise e

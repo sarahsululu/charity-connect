@@ -95,7 +95,6 @@ class CharityPlatformMenu:
             display_error(f"❌ Error: {e}")
         self.pause()
 
-    # ===== User Menu =====
     def show_user_menu(self):
         while True:
             self.clear_screen()
@@ -199,9 +198,25 @@ class CharityPlatformMenu:
         print(f"Username: {user.username}")
         print(f"Email: {user.email}")
         print(f"Name: {user.full_name}")
+
+        donations = self.donation_service.get_donation_history(user.id)
+
+        print("\n=== Your Donation History ===")
+        if not donations:
+            print("No donations yet.")
+        else:
+            total = 0
+            for i, d in enumerate(donations, start=1):
+                print(f"{i}. {d.created_at.strftime('%Y-%m-%d')} - "
+                      f"{format_currency(d.amount)} to {d.campaign.title} "
+                      f"(by {d.donor_name})")
+                total += d.amount
+            print(f"Total Donated: {format_currency(total)}")
+
         self.pause()
 
 
 if __name__ == "__main__":
     menu = CharityPlatformMenu()
     menu.show_guest_menu()
+
