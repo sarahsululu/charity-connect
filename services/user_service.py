@@ -1,5 +1,5 @@
 from sqlalchemy.exc import IntegrityError
-from models.database import get_session, close_session
+from models.database import get_session
 from models.user import User
 
 class UserService:
