@@ -2,6 +2,9 @@
 
 ## A Python CLI application for managing charity campaigns and donations. Users can register, create campaigns, make donations, and track their donation history.
 
+### video recording link
+  https://screenapp.io/app/#/shared/y0fI9DVbpP
+
 ## Features
 
 1. User Registration & Login – Secure user accounts.
